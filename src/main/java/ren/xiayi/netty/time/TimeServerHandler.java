@@ -16,7 +16,6 @@ public class TimeServerHandler extends ChannelHandlerAdapter {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		super.channelRead(ctx, msg);
 		ByteBuf buf = (ByteBuf) msg;
 		byte[] req = new byte[buf.readableBytes()];
 		buf.readBytes(req);//read buf data to req
