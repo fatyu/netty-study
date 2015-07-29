@@ -6,15 +6,15 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimeClientHandler extends ChannelHandlerAdapter {
+	private final AtomicInteger count = new AtomicInteger();
 
-	private final ByteBuf msg;
+	private byte[] reqMsg;
 
 	public TimeClientHandler() {
-		byte[] reqMsg = "now".getBytes();
-		msg = Unpooled.buffer(reqMsg.length);
-		msg.writeBytes(reqMsg);
+		reqMsg = ("now" + System.getProperty("line.separator")).getBytes();
 	}
 
 	@Override
@@ -24,7 +24,12 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		ctx.writeAndFlush(msg);
+		ByteBuf msg;
+		for (int i = 0; i < 100; i++) {
+			msg = Unpooled.buffer(reqMsg.length);
+			msg.writeBytes(reqMsg);
+			ctx.writeAndFlush(msg);
+		}
 	}
 
 	@Override
@@ -34,8 +39,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 		byte[] bytes = new byte[readableBytes];
 		result.readBytes(bytes);
 		String resultStr = new String(bytes, Charset.forName("UTF-8"));
-		System.out.println("query result is :" + resultStr);
-
+		System.out.println("query result is :" + resultStr + "    the counter num is " + count.incrementAndGet());
 	}
 
 	@Override
