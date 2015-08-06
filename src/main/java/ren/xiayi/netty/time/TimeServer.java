@@ -8,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -40,7 +42,8 @@ public class TimeServer {
 	class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel ch) throws Exception {
-			ch.pipeline().addLast(new TimeServerHandler());
+			ch.pipeline().addLast(new TimeServerHandler()).addLast(new LineBasedFrameDecoder(1024))
+					.addLast(new StringDecoder());
 		}
 
 	}
