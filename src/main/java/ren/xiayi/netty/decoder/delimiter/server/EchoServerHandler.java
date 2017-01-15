@@ -11,9 +11,7 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
 
 	int counter = 0;
 
-	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		super.channelRead(ctx, msg);
 		String requestBody = msg.toString();
 		System.out.println("This is " + ++counter + " times receive client:[" + requestBody + "]");
 		requestBody += "$_";

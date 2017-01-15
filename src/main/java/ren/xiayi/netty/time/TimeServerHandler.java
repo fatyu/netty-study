@@ -1,21 +1,20 @@
 package ren.xiayi.netty.time;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
-
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelHandlerContext;
+
 public class TimeServerHandler extends ChannelHandlerAdapter {
 	private final AtomicInteger count = new AtomicInteger();
 
 	@SuppressWarnings("deprecation")
-	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		ByteBuf buf = (ByteBuf) msg;
 		byte[] req = new byte[buf.readableBytes()];
@@ -47,8 +46,4 @@ public class TimeServerHandler extends ChannelHandlerAdapter {
 		ctx.close();
 	}
 
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		flush(ctx);
-	}
 }

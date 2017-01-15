@@ -1,12 +1,12 @@
 package ren.xiayi.netty.time;
 
+import java.nio.charset.Charset;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.nio.charset.Charset;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimeClientHandler extends ChannelHandlerAdapter {
 	private final AtomicInteger count = new AtomicInteger();
@@ -22,7 +22,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 		ctx.close();
 	}
 
-	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		ByteBuf msg;
 		for (int i = 0; i < 100; i++) {
@@ -32,7 +31,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 		}
 	}
 
-	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		ByteBuf result = (ByteBuf) msg;
 		int readableBytes = result.readableBytes();
@@ -40,11 +38,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 		result.readBytes(bytes);
 		String resultStr = new String(bytes, Charset.forName("UTF-8"));
 		System.out.println("query result is :" + resultStr + "    the counter num is " + count.incrementAndGet());
-	}
-
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		super.channelReadComplete(ctx);
 	}
 
 }
